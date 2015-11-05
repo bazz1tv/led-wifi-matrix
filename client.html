@@ -1,0 +1,59 @@
+<meta http-equiv="Context-Type" content="text/html; charset=US-ASCII">
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="static/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="http://www.bitstorm.org/jquery/jquery-1.9.1.min.js"/>
+    </script>
+ 
+    <script type="text/javascript" src="http://www.bitstorm.org/jquery/color-animation/jquery.animate-colors-min.js">
+    </script>
+ 
+ 
+    <script type="text/javascript" src="/socket.io/socket.io.js">
+    </script>
+ 
+    <script>    
+        var socket = io(); //io.connect("http://127.0.0.1:3000");
+ 
+        $(window).bind("beforeunload", function() {
+            socket.disconnect();
+        });
+ 
+        socket.on('new_update', function (msg) {
+            var el = $('#log').prepend($('<p class="update">').append($('<em>').text(msg))).css("color", "#FF0000");
+            $("#log .update").first().animate({color: '#000000'}, 3500);
+        });
+ 
+ 
+        socket.on('worker_connected', function (msg) {
+            var el = $('#log').prepend($('<p>').append($('<b>').text(msg)));
+        });
+ 
+        socket.on('worker_disconnected', function (msg) {
+            var el = $('#log').prepend($('<p>').append($('<b>').text(msg)));
+        });
+ 
+        $.ready(function () {
+ 
+        });
+    </script>
+ 
+    <style type="text/css">
+        #log {
+            display: inline-block;
+            padding: 0 50px;
+            max-height: 300px;
+            overflow-y: scroll;
+        }
+ 
+        p {
+            margin: 0;
+        }
+    </style>
+  </head>
+<body>
+    <div id="log">
+    </div>
+</body>
+</html>
