@@ -1,5 +1,8 @@
+var HOSTNAME="wiki.bazz1.com";
 var HTTP_PORT = 3000;
 var PITALK_PORT = 9999;
+var FILESERVER_PORT = 8888;
+var FILESERVER_URL = 'http://' + HOSTNAME + ':' + FILESERVER_PORT;
 //
 fs = require('fs');
 // must read the file synchronously else the server will be initialized before we read the port value!! readFile is async
@@ -12,15 +15,30 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var workerio = require('socket.io').listen(PITALK_PORT);
 
-app.use(express.static('jqfu-9.11.2'));
+app.use(express.static('public'));
+
+// var proxy = require('http-proxy').createProxyServer({
+//     host: 'http://wiki.bazz1.com',
+//     port: '8888'
+// });
+
+// app.get('/gfx-upload', function(req, res, next) {
+//   res.redirect(FILESERVER_URL);
+// });
+
+// app.use('/gfx-upload', function(req, res, next) {
+  
+//   //console.log(FILESERVER_URL);
+//   proxy.web(req, res, {
+//       target: 'http://wiki.bazz1.com:8888'
+//   }, next);
+  
+//   // res.redirect(DERP);
+// });
+
+
 app.get('/', function(req, res){
   res.sendFile('jqfu-9.11.2/jquery-ui.html', {"root": __dirname});
-});
-
-// POST method route
-app.post('/', function (req, res) {
-  //res.send('POST request to the homepage');
-  //require('blueimp-file-upload-node')
 });
 
 

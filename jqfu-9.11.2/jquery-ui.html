@@ -144,6 +144,7 @@
     <a class="play-pause"></a>
     <ol class="indicator"></ol>
 </div>
+<button id="mybutton">DERP</button>
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
@@ -192,8 +193,8 @@
         <td>
             <span class="size">{%=o.formatFileSize(file.size)%}</span>
         </td>
-        <td>
-            <button class="delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>Delete</button>
+        <td style="display:none">
+            <button class="delete" data-title="{%=file.name%}" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>Delete</button>
             <input type="checkbox" name="delete" value="1" class="toggle">
         </td>
     </tr>
@@ -240,6 +241,9 @@ $('#theme-switcher').change(function () {
             $(this).val() + '/jquery-ui.css'
         )
     );
+});
+$('#mybutton').click(function(){
+    $('button[data-title="photo.jpg"]').trigger('click');
 });
 </script>
 <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
