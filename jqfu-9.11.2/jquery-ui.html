@@ -145,6 +145,7 @@
     <ol class="indicator"></ol>
 </div>
 <button id="mybutton">DERP</button>
+<button id="mybutton2">initStuff</button>
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
@@ -228,9 +229,23 @@
 <script src="js/jquery.fileupload-ui.js"></script>
 <!-- The File Upload jQuery UI plugin -->
 <script src="js/jquery.fileupload-jquery-ui.js"></script>
+<!-- SOCKETIO -->
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <!-- The main application script -->
 <script src="js/main.js"></script>
 <script>
+// init socketio
+var socket = io(); //io.connect("http://127.0.0.1:3000");
+$(window).bind("beforeunload", function() {
+    socket.disconnect();
+});
+
+socket.on('new_file_uploaded', function (data) {
+    //$('#fileupload')[0]
+    var widget = $('#fileupload').data("ui-fileupload");
+    widget.done_with_context(e, data, $('#fileupload')[0]);
+});
+
 // Initialize the jQuery UI theme switcher:
 $('#theme-switcher').change(function () {
     var theme = $('#theme');
@@ -244,6 +259,9 @@ $('#theme-switcher').change(function () {
 });
 $('#mybutton').click(function(){
     $('button[data-title="photo.jpg"]').trigger('click');
+});
+$('#mybutton2').click(function(){
+    initStuff();
 });
 </script>
 <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->

@@ -49,7 +49,10 @@ http.listen(HTTP_PORT, function(){
  Real clients
 */
 io.sockets.on('connection', function (socket) {
-     console.log('client connected');
+  socket.on('new_file_uploaded', function(e, data, there) {
+    
+  })
+  console.log('client connected');
 });
  
  
