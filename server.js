@@ -1,14 +1,31 @@
-var app = require('express')();
+var HTTP_PORT = 3000;
+var PITALK_PORT = 9999;
+//
+fs = require('fs');
+// must read the file synchronously else the server will be initialized before we read the port value!! readFile is async
+PI_PORT = parseInt(fs.readFileSync(__dirname + '/PITALK_PORT', 'ascii'));
+console.log('PITALK_PORT == ' + PITALK_PORT);
+//
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var workerio = require('socket.io').listen(9999);
+var workerio = require('socket.io').listen(PITALK_PORT);
 
+app.use(express.static('jqfu-9.11.2'));
 app.get('/', function(req, res){
-  res.sendFile('client.html');
+  res.sendFile('jqfu-9.11.2/jquery-ui.html', {"root": __dirname});
 });
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+// POST method route
+app.post('/', function (req, res) {
+  //res.send('POST request to the homepage');
+  //require('blueimp-file-upload-node')
+});
+
+
+http.listen(HTTP_PORT, function(){
+  console.log('listening on *:' + HTTP_PORT);
 });
 /*
  Real clients
@@ -35,11 +52,12 @@ workerio.sockets.on('connection', function (socket) {
 });
  
  
-function askUpdates()
+function queue_image()
 {
-    workerio.sockets.emit("please_update", "now");
-    setTimeout(askUpdates, 1000);
+	// communicate to PI
+    workerio.sockets.emit("queue_image", "now");
+    setTimeout(queue_image, 1000);
 };
  
  
-askUpdates();
+queue_image();

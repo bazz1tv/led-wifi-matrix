@@ -3,6 +3,23 @@
 <html>
   <head>
     <link href="static/css/style.css" rel="stylesheet">
+ 
+    <style type="text/css">
+        #log {
+            display: inline-block;
+            padding: 0 50px;
+            max-height: 300px;
+            overflow-y: scroll;
+        }
+ 
+        p {
+            margin: 0;
+        }
+    </style>
+  </head>
+<body>
+    <div id="log">
+    </div>
     <script type="text/javascript" src="http://www.bitstorm.org/jquery/jquery-1.9.1.min.js"/>
     </script>
  
@@ -38,22 +55,5 @@
  
         });
     </script>
- 
-    <style type="text/css">
-        #log {
-            display: inline-block;
-            padding: 0 50px;
-            max-height: 300px;
-            overflow-y: scroll;
-        }
- 
-        p {
-            margin: 0;
-        }
-    </style>
-  </head>
-<body>
-    <div id="log">
-    </div>
 </body>
 </html>
