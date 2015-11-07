@@ -12,10 +12,11 @@ console.log('PITALK_PORT == ' + PITALK_PORT);
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var workerio = require('socket.io').listen(PITALK_PORT);
-
+io = require('socket.io')(http);
+workerio = require('socket.io').listen(PITALK_PORT);
 app.use(express.static('public'));
+
+require('./fileserver.js');
 
 // var proxy = require('http-proxy').createProxyServer({
 //     host: 'http://wiki.bazz1.com',
@@ -56,8 +57,8 @@ io.on('connection', function (socket) {
 
   console.log('client connected');
 });
- 
- 
+
+
 /*
  Worker client (python)
 */
@@ -75,12 +76,12 @@ workerio.sockets.on('connection', function (socket) {
 });
  
  
-function queue_image()
-{
-	// communicate to PI
-    workerio.sockets.emit("queue_image", "now");
-    setTimeout(queue_image, 1000);
-};
+// function queue_image()
+// {
+// 	// communicate to PI
+//     workerio.sockets.emit("queue_image", "now");
+//     setTimeout(queue_image, 1000);
+// };
  
  
-queue_image();
+// queue_image();
