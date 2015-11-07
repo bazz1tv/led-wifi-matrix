@@ -83,17 +83,18 @@
     </select>
 </form>
 <ul class="navigation">
-    <li><a href="basic.html">Basic</a></li>
+    <!--<li><a href="basic.html">Basic</a></li>
     <li><a href="basic-plus.html">Basic Plus</a></li>
     <li><a href="index.html">Basic Plus UI</a></li>
     <li><a href="angularjs.html">AngularJS</a></li>
-    <li class="active"><a href="jquery-ui.html">jQuery UI</a></li>
+    <li class="active"><a href="jquery-ui.html">jQuery UI</a></li>-->
 </ul>
+<!--
 <blockquote>
     <p>File Upload widget with multiple file selection, drag&amp;drop support, progress bars, validation and preview images, audio and video for jQuery UI.<br>
     Supports cross-domain, chunked and resumable file uploads and client-side image resizing.<br>
     Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.</p>
-</blockquote>
+</blockquote>-->
 <!-- The file upload form used as target for the file upload widget -->
 <form id="fileupload" action="http://wiki.bazz1.com:8888" method="POST" enctype="multipart/form-data">
     <!-- Redirect browsers with JavaScript disabled to the origin page -->
@@ -203,6 +204,28 @@
 </script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<!-- SOCKETIO -->
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script>
+// init socketio
+var socket = io(); //io.connect("http://127.0.0.1:3000");
+window.console.log(socket);
+$(window).bind("beforeunload", function() {
+    socket.disconnect();
+});
+
+socket.on('new_file_uploaded', function (data) {
+    //$('#fileupload')[0]
+    //$('#fileupload').fileupload('done_without_context', '$("#fileupload")[0], data.files');
+    //alert("hooray");
+    window.console.log(data);
+    //$('#fileupload').fileupload('option','done_without_context', $("#fileupload")[0], data.files);
+    var there = $("#fileupload")[0];
+    var that = $(there).data('blueimp-fileupload') || $(there).data('fileupload');
+    var done_without_context = that.options.done_without_context;
+    done_without_context(there, data.files);
+});
+</script>
 <!-- The Templates plugin is included to render the upload/download listings -->
 <script src="//blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
 <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
@@ -229,23 +252,9 @@
 <script src="js/jquery.fileupload-ui.js"></script>
 <!-- The File Upload jQuery UI plugin -->
 <script src="js/jquery.fileupload-jquery-ui.js"></script>
-<!-- SOCKETIO -->
-<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <!-- The main application script -->
 <script src="js/main.js"></script>
 <script>
-// init socketio
-var socket = io(); //io.connect("http://127.0.0.1:3000");
-$(window).bind("beforeunload", function() {
-    socket.disconnect();
-});
-
-socket.on('new_file_uploaded', function (data) {
-    //$('#fileupload')[0]
-    var widget = $('#fileupload').data("ui-fileupload");
-    widget.done_with_context(e, data, $('#fileupload')[0]);
-});
-
 // Initialize the jQuery UI theme switcher:
 $('#theme-switcher').change(function () {
     var theme = $('#theme');
@@ -263,6 +272,8 @@ $('#mybutton').click(function(){
 $('#mybutton2').click(function(){
     initStuff();
 });
+
+
 </script>
 <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
 <!--[if (gte IE 8)&(lt IE 10)]>
