@@ -18,15 +18,15 @@ var FILESERVER_PORT = 8888;
     'use strict';
 
     console.log('__dirname == ' + __dirname);
-    var iQueue = require('./Queue.js');
+    
 
     
-    // iQueue.enqueue('item1');
-    // iQueue.enqueue('item2');
-    // iQueue.enqueue('item3');
-    // iQueue.dequeue();
-    // iQueue.enqueue('item4');
-    // console.log(iQueue.arr());
+    // GLOBAL.iQueue.enqueue('item1');
+    // GLOBAL.iQueue.enqueue('item2');
+    // GLOBAL.iQueue.enqueue('item3');
+    // GLOBAL.iQueue.dequeue();
+    // GLOBAL.iQueue.enqueue('item4');
+    // console.log(GLOBAL.iQueue.arr());
     var path = require('path'),
         fs = require('fs'),
         // Since Node 0.8, .existsSync() moved from path to fs:
@@ -219,9 +219,9 @@ var FILESERVER_PORT = 8888;
         //     });
         //     handler.callback({files: files});
         // });
-        // if (!iQueue.isEmpty())
+        // if (!GLOBAL.iQueue.isEmpty())
         // {
-            console.log(iQueue.arr());
+            //console.log(GLOBAL.iQueue.arr());
             iQueue.arr().forEach(function (name) {
                 var stats = fs.statSync(options.uploadDir + '/' + name),
                         fileInfo;
@@ -250,7 +250,12 @@ var FILESERVER_PORT = 8888;
                 if (!counter) {
                     files.forEach(function (fileInfo) {
                         fileInfo.initUrls(handler.req);
+                        var queueEmpty = iQueue.isEmpty();
                         iQueue.enqueue(fileInfo.name);
+                        if (queueEmpty)
+                        {
+                        	workerio.emit('queue_image', fileInfo.name);
+                        }
                     });
                     handler.callback({files: files}, redirect);
                 }

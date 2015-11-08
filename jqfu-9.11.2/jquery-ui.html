@@ -225,6 +225,10 @@ socket.on('new_file_uploaded', function (data) {
     var done_without_context = that.options.done_without_context;
     done_without_context(there, data.files);
 });
+
+socket.on('remove_img', function (fileName) {
+    $('button[data-title="' + fileName + '"]').trigger('click');
+});
 </script>
 <!-- The Templates plugin is included to render the upload/download listings -->
 <script src="//blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>

@@ -12,10 +12,11 @@ console.log('PITALK_PORT == ' + PITALK_PORT);
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
-io = require('socket.io')(http);
-workerio = require('socket.io').listen(PITALK_PORT);
+GLOBAL.io = require('socket.io')(http);
+GLOBAL.workerio = require('socket.io').listen(PITALK_PORT);
 app.use(express.static('public'));
 
+GLOBAL.iQueue = require('./Queue.js');
 require('./fileserver.js');
 
 // var proxy = require('http-proxy').createProxyServer({
@@ -55,7 +56,11 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('new_file_uploaded', data);
   })
 
-  console.log('client connected');
+  //var address = socket.handshake.address;
+  //console.log('New connection from ' + address.address + ':' + address.port);
+  //console.log('client connected');
+  //console.log(socket);
+  console.log('client connected :', socket.request.connection._peername);
 });
 
 
@@ -64,15 +69,30 @@ io.on('connection', function (socket) {
 */
 workerio.sockets.on('connection', function (socket) {
     socket.on('disconnect', function(message, callback) {
-        io.sockets.emit('worker_disconnected', "worker disconnected");
+      //io.sockets.emit('worker_disconnected', "worker disconnected");
+      console.log("PI disconnected");
     });
  
     // When we receive an update from worker.
     socket.on('update_from_worker', function(message, callback) {
-        io.sockets.emit('new_update', message);
+      io.sockets.emit('new_update', message);
+    });
+
+    socket.on('image_display_done', function() {
+      console.log('image_display_done');
+      // dequeue image and remove image from visual Queues of all browsers
+      var itemToDelete = iQueue.dequeue();
+      io.sockets.emit('remove_img', itemToDelete);
+      // if the queue is not empty, play another image
+      if (!iQueue.isEmpty())
+      {
+        workerio.emit('queue_image', iQueue.peek());
+      }
+      // see delete button on webpage I made for sample
     });
  
-    io.sockets.emit('worker_connected', "worker connected");
+    //io.sockets.emit('worker_connected', "worker connected");
+    console.log("PI connected");
 });
  
  
