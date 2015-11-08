@@ -1,0 +1,31 @@
+OK I NEED to get the fileserver to be in the same socketIO script as the main server so that I can simply
+have a home for all the cross-talk and logic
+
+[NO THEY SHOULDNT] Files uploads should OVERWRITE existing files
+
+OK Image filenames in io-client.py need to handle spaces in filename
+
+-------
+Server blocks for awhile while talking to Raspberry PI -- have this happen in another thread
+
+Have NodeJS make directories if they do not exist (fileserver) for such as  : rename
+  see http://stackoverflow.com/questions/13696148/node-js-create-folder-or-use-existing
+
+Have fileserver work on same port as regular HTTP server
+
+When removing files from visual Queue -- do not actually remove from Server..
+
+add "images are deleted immediately or within the week" message
+
+add user-specified duration with individual file upload
+
+fix multiple uploads ordering issue (source client ordering is different from crowd)
+  -- this must mean there is a difference between file upload appearance (pre-upload) and actual order of uploading.
+
+limit file uploads to 4 (50?)
+
+have pre-select images user can choose
+
+Add num-clients-connected reveal
+
+limit the queue size to 100 or 200 (or 500/1000?)

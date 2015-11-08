@@ -3,7 +3,7 @@ var HTTP_PORT = 3000;
 var PITALK_PORT = 9999;
 var FILESERVER_PORT = 8888;
 var FILESERVER_URL = 'http://' + HOSTNAME + ':' + FILESERVER_PORT;
-//
+// read PITALK_PORT file
 fs = require('fs');
 // must read the file synchronously else the server will be initialized before we read the port value!! readFile is async
 PI_PORT = parseInt(fs.readFileSync(__dirname + '/PITALK_PORT', 'ascii'));
@@ -12,11 +12,11 @@ console.log('PITALK_PORT == ' + PITALK_PORT);
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
-GLOBAL.io = require('socket.io')(http);
-GLOBAL.workerio = require('socket.io').listen(PITALK_PORT);
-app.use(express.static('public'));
+GLOBAL.io = require('socket.io')(http);                     // global not yet REQUIRED
+GLOBAL.workerio = require('socket.io').listen(PITALK_PORT); // global so fileserver.js has access
+app.use(express.static('public'));                          // static files in public folder
 
-GLOBAL.iQueue = require('./Queue.js');
+GLOBAL.iQueue = require('./Queue.js');  //
 require('./fileserver.js');
 
 // var proxy = require('http-proxy').createProxyServer({
@@ -51,15 +51,16 @@ http.listen(HTTP_PORT, function(){
  Real clients
 */
 io.on('connection', function (socket) {
+  socket.on('disconnect', function(message, callback) {
+      //io.sockets.emit('worker_disconnected', "worker disconnected");
+      console.log("client disconnected : ", socket.request.connection._peername);
+    });
   socket.on('new_file_uploaded', function(data) {
     console.log("new_file_uploaded");
     socket.broadcast.emit('new_file_uploaded', data);
   })
 
-  //var address = socket.handshake.address;
-  //console.log('New connection from ' + address.address + ':' + address.port);
-  //console.log('client connected');
-  //console.log(socket);
+  // Not documented so may not work forever
   console.log('client connected :', socket.request.connection._peername);
 });
 
