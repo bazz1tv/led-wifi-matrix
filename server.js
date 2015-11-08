@@ -19,6 +19,8 @@ app.use(express.static('public'));                          // static files in p
 GLOBAL.iQueue = require('./Queue.js');  //
 require('./fileserver.js');
 
+var connectedPeers = 0;
+
 // var proxy = require('http-proxy').createProxyServer({
 //     host: 'http://wiki.bazz1.com',
 //     port: '8888'
@@ -54,6 +56,7 @@ io.on('connection', function (socket) {
   socket.on('disconnect', function(message, callback) {
       //io.sockets.emit('worker_disconnected', "worker disconnected");
       console.log("client disconnected : ", socket.request.connection._peername);
+      io.emit('numPeers_update', --connectedPeers);
     });
   socket.on('new_file_uploaded', function(data) {
     console.log("new_file_uploaded");
@@ -62,6 +65,7 @@ io.on('connection', function (socket) {
 
   // Not documented so may not work forever
   console.log('client connected :', socket.request.connection._peername);
+  io.emit('numPeers_update', ++connectedPeers);
 });
 
 
@@ -85,16 +89,22 @@ workerio.sockets.on('connection', function (socket) {
       var itemToDelete = iQueue.dequeue();
       io.sockets.emit('remove_img', itemToDelete);
       // if the queue is not empty, play another image
-      if (!iQueue.isEmpty())
-      {
-        workerio.emit('queue_image', iQueue.peek());
-      }
+      playImageIfQueued();
       // see delete button on webpage I made for sample
     });
  
     //io.sockets.emit('worker_connected', "worker connected");
     console.log("PI connected");
+    playImageIfQueued();
 });
+
+function playImageIfQueued()
+{
+  if (!iQueue.isEmpty())
+  {
+    workerio.emit('queue_image', iQueue.peek());
+  }
+}
  
  
 // function queue_image()

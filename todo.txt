@@ -29,3 +29,5 @@ have pre-select images user can choose
 Add num-clients-connected reveal
 
 limit the queue size to 100 or 200 (or 500/1000?)
+
+OK [images will be resumed when PI connects -- but clients should be aware that it isn't connected] if the raspberry pi is not connected when images are queued.. ACCOuNT FOR THAT!

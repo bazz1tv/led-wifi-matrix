@@ -51,9 +51,9 @@
     <li><a href="https://github.com/blueimp/jQuery-File-Upload/wiki">Documentation</a></li>
     <li><a href="https://blueimp.net">&copy; blueimp.net</a></li>
 </ul>
-<h1>jQuery File Upload Demo</h1>
-<h2>jQuery UI version</h2>
-<form>
+<h1>BAZZ's LED WIFI Matrix</h1>
+<h2>Audience: <span id="audienceNum"></span></h2>
+<!--<form>
     <label for="theme-switcher">Theme:</label>
     <select id="theme-switcher" class="pull-right">
         <option value="black-tie">Black Tie</option>
@@ -81,7 +81,7 @@
         <option value="ui-lightness">UI Lightness</option>
         <option value="vader">Vader</option>
     </select>
-</form>
+</form>-->
 <ul class="navigation">
     <!--<li><a href="basic.html">Basic</a></li>
     <li><a href="basic-plus.html">Basic Plus</a></li>
@@ -228,6 +228,11 @@ socket.on('new_file_uploaded', function (data) {
 
 socket.on('remove_img', function (fileName) {
     $('button[data-title="' + fileName + '"]').trigger('click');
+});
+
+socket.on('numPeers_update', function (numConnected) {
+    window.console.log('numPeers_update');
+    $('#audienceNum').text(numConnected);
 });
 </script>
 <!-- The Templates plugin is included to render the upload/download listings -->
