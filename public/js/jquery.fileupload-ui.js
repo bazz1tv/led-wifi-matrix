@@ -409,6 +409,7 @@
             },
             // Callback for file deletion:
             destroy: function (e, data) {
+                window.console.log('destroy');
                 if (e.isDefaultPrevented()) {
                     return false;
                 }
@@ -422,14 +423,15 @@
                             }
                         );
                     };
-                if (data.url) {
+                // Just remove the node.. Do not DELETE file
+                /*if (data.url) {
                     data.dataType = data.dataType || that.options.dataType;
                     $.ajax(data).done(removeNode).fail(function () {
                         that._trigger('destroyfailed', e, data);
                     });
-                } else {
+                } else {*/
                     removeNode();
-                }
+                //}
             }
         },
 
@@ -586,6 +588,7 @@
         },
 
         _deleteHandler: function (e) {
+            window.console.log('_deleteHandler');
             e.preventDefault();
             var button = $(e.currentTarget);
             this._trigger('destroy', e, $.extend({

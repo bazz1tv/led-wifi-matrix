@@ -15,7 +15,7 @@
 var FILESERVER_PORT = 8888;
 var MAIN_SERVER_HOST = "wiki.bazz1.com";
 
-(function (port) {
+
     'use strict';
 
     console.log('__dirname == ' + __dirname);
@@ -148,9 +148,10 @@ var MAIN_SERVER_HOST = "wiki.bazz1.com";
                 setNoCacheHeaders();
                 handler.post();
                 break;
-            case 'DELETE':
+            // DO NOT publically handle DELETEing of files
+            /*case 'DELETE':
                 handler.destroy();
-                break;
+                break;*/
             default:
                 res.statusCode = 405;
                 res.end();
@@ -333,9 +334,21 @@ var MAIN_SERVER_HOST = "wiki.bazz1.com";
         }
         handler.callback({success: false});
     };
-    if (options.ssl) {
-        require('https').createServer(options.ssl, serve).listen(port);
-    } else {
-        require('http').createServer(serve).listen(port);
+    exports.destroyFile = function(fileName) {
+        console.log('destroyFile: ' + fileName)
+        if (fileName[0] !== '.') {
+            fs.unlink(options.uploadDir + '/' + fileName, function (ex) {
+                Object.keys(options.imageVersions).forEach(function (version) {
+                    fs.unlink(options.uploadDir + '/' + version + '/' + fileName);
+                });
+                //handler.callback({success: !ex});
+            });
+            return;
+        }
     }
-}(FILESERVER_PORT));
+    if (options.ssl) {
+        require('https').createServer(options.ssl, serve).listen(FILESERVER_PORT);
+    } else {
+        require('http').createServer(serve).listen(FILESERVER_PORT);
+    }
+

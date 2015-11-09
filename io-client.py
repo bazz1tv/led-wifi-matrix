@@ -17,7 +17,7 @@ def queueImage_cb(*args):
     #socketIO.emit('update_from_worker', "io-client.py: finished update - %s" % (datetime.now(),))
     #subprocess.call([/usr/local/bin/led-image-viewer ])
     print('queue_image: ' + args[0])
-    system('sudo ' + LED_IMAGE_VIEWER + ' -t' + '15' + ' "' + uploadDir + '/' + args[0] + '"')
+    system('sudo ' + LED_IMAGE_VIEWER + ' -t' + '5' + ' "' + uploadDir + '/' + args[0] + '"')
     socketIO.emit('image_display_done')
 
 socketIO.on("queue_image", queueImage_cb)

@@ -17,7 +17,7 @@ GLOBAL.workerio = require('socket.io').listen(PITALK_PORT); // global so fileser
 app.use(express.static('public'));                          // static files in public folder
 
 GLOBAL.iQueue = require('./Queue.js');  //
-require('./fileserver.js');
+var fileServer = require('./fileserver.js');
 
 var connectedPeers = 0;
 
@@ -83,6 +83,9 @@ workerio.sockets.on('connection', function (socket) {
       // dequeue image and remove image from visual Queues of all browsers
       var itemToDelete = iQueue.dequeue();
       io.sockets.emit('remove_img', itemToDelete);
+      // DELETE file from SERVER-SIDE to prevent client-side abuse
+      // this currently is implemented in a style requiring the FileServer to be run from this file
+      fileServer.destroyFile(itemToDelete);
       // if the queue is not empty, play another image
       playImageIfQueued();
       // see delete button on webpage I made for sample
