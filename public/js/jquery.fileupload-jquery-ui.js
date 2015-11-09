@@ -132,6 +132,7 @@
         },
 
         _destroy: function () {
+            window.console.log("_destroy!");
             this.element
                 .find('.fileupload-buttonbar')
                 .find('.fileinput-button').each(function () {

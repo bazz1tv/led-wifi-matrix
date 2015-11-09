@@ -60,7 +60,7 @@ io.on('connection', function (socket) {
     });
   socket.on('new_file_uploaded', function(data) {
     console.log("new_file_uploaded");
-    socket.broadcast.emit('new_file_uploaded', data);
+    /*socket.broadcast*/io.emit('new_file_uploaded', data);
   })
 
   // Not documented so may not work forever
@@ -76,11 +76,6 @@ workerio.sockets.on('connection', function (socket) {
     socket.on('disconnect', function(message, callback) {
       //io.sockets.emit('worker_disconnected', "worker disconnected");
       console.log("PI disconnected");
-    });
- 
-    // When we receive an update from worker.
-    socket.on('update_from_worker', function(message, callback) {
-      io.sockets.emit('new_update', message);
     });
 
     socket.on('image_display_done', function() {

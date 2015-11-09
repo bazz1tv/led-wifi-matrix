@@ -13,12 +13,13 @@
 /*jslint nomen: true, regexp: true, unparam: true, stupid: true */
 /*global require, __dirname, unescape, console */
 var FILESERVER_PORT = 8888;
+var MAIN_SERVER_HOST = "wiki.bazz1.com";
 
 (function (port) {
     'use strict';
 
     console.log('__dirname == ' + __dirname);
-    
+    var sizeOf = require('image-size');
 
     
     // GLOBAL.iQueue.enqueue('item1');
@@ -49,8 +50,8 @@ var FILESERVER_PORT = 8888;
             imageTypes: /\.(gif|jpe?g|png)$/i,
             imageVersions: {
                 'thumbnail': {
-                    width: 80,
-                    height: 80
+                    width: 32,
+                    height: 32
                 }
             },
             accessControl: {
@@ -266,6 +267,7 @@ var FILESERVER_PORT = 8888;
             var fileInfo = new FileInfo(file, handler.req, true);
             fileInfo.safeName();
             map[path.basename(file.path)] = fileInfo;
+            console.log("fileBegin: " + fileInfo.name);
             files.push(fileInfo);
         }).on('field', function (name, value) {
             if (name === 'redirect') {
@@ -283,13 +285,23 @@ var FILESERVER_PORT = 8888;
                 Object.keys(options.imageVersions).forEach(function (version) {
                     counter += 1;
                     var opts = options.imageVersions[version];
-                    imageMagick.resize({
-                        width: opts.width,
-                        height: opts.height,
-                        srcPath: options.uploadDir + '/' + fileInfo.name,
-                        dstPath: options.uploadDir + '/' + version + '/' +
-                            fileInfo.name
-                    }, finish);
+                    var dimensions = sizeOf(options.uploadDir + '/' + fileInfo.name);
+                    console.log("file: " + fileInfo.name);
+                    if (!(dimensions.width == opts.width && dimensions.height == opts.height))
+                    {
+                        imageMagick.resize({
+                            width: opts.width,
+                            height: opts.height,
+                            srcPath: options.uploadDir + '/' + fileInfo.name,
+                            dstPath: options.uploadDir + '/' + version + '/' +
+                                fileInfo.name
+                        }, finish);
+                    }
+                    else
+                    {
+                        fs.symlink(options.uploadDir + '/' + fileInfo.name, options.uploadDir + '/' + version + '/' +
+                                fileInfo.name, finish);
+                    }
                 });
             }
         }).on('aborted', function () {

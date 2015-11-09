@@ -104,7 +104,7 @@
                     .data('data', data)
                     .addClass('processing');
                 options.filesContainer[
-                    options.prependFiles ? 'prepend' : 'append'
+                    !options.prependFiles ? 'prepend' : 'append'
                 ](data.context);
                 that._forceReflow(data.context);
                 that._transition(data.context);
@@ -171,13 +171,14 @@
                             {error: 'Empty file upload result'};
                     //alert (file);
                     deferred = that._addFinishedDeferreds();
+                    //window.console.log($(there).closest('.cancel')); //.trigger('click');
                     that._transition($(this)).done(
                         function () {
                             var node = $(this);
-                            template = that._renderDownload([file])
-                                .replaceAll(node);
-                            that._forceReflow(template);
-                            that._transition(template).done(
+                            //template = that._renderDownload([file])
+                                //.replaceAll(node);
+                            //that._forceReflow(template);
+                            that._transition(/*template*/'').done(
                                 function () {
                                     // The following was removed by my whim and it seems to work OK
                                     // I did this so I can reduce the network payload (not have to send DATA)
@@ -560,6 +561,8 @@
             var button = $(e.currentTarget),
                 template = button.closest('.template-upload'),
                 data = template.data('data');
+            window.console.log("_startHandler");
+            window.console.log(data);
             button.prop('disabled', true);
             if (data && data.submit) {
                 data.submit();
@@ -568,6 +571,8 @@
 
         _cancelHandler: function (e) {
             e.preventDefault();
+            //window.console.log("_cancelHandler");
+            //window.console.log(e.currentTarget);
             var template = $(e.currentTarget)
                     .closest('.template-upload,.template-download'),
                 data = template.data('data') || {};
