@@ -43,7 +43,7 @@ var MAIN_SERVER_HOST = "wiki.bazz1.com";
             maxPostSize: 11000000000, // 11 GB
             minFileSize: 1,
             maxFileSize: 10000000000, // 10 GB
-            acceptFileTypes: /.+/i,
+            acceptFileTypes: /\.(gif|jpe?g|png)$/i, ///.+/i,
             // Files not matched by this regular expression force a download dialog,
             // to prevent executing any scripts in the context of the service domain:
             inlineFileTypes: /\.(gif|jpe?g|png)$/i,
@@ -252,12 +252,6 @@ var MAIN_SERVER_HOST = "wiki.bazz1.com";
                 if (!counter) {
                     files.forEach(function (fileInfo) {
                         fileInfo.initUrls(handler.req);
-                        var queueEmpty = iQueue.isEmpty();
-                        iQueue.enqueue(fileInfo.name);
-                        if (queueEmpty)
-                        {
-                        	workerio.emit('queue_image', fileInfo.name);
-                        }
                     });
                     handler.callback({files: files}, redirect);
                 }
@@ -304,6 +298,12 @@ var MAIN_SERVER_HOST = "wiki.bazz1.com";
                                 fileInfo.name, finish);
                     }
                 });
+            }
+            var queueEmpty = iQueue.isEmpty();
+            iQueue.enqueue(fileInfo.name);
+            if (queueEmpty)
+            {
+                workerio.emit('queue_image', fileInfo.name);
             }
         }).on('aborted', function () {
             tmpFiles.forEach(function (file) {

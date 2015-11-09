@@ -19,7 +19,9 @@ var initStuff = function() {
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
-        url: 'http://wiki.bazz1.com:8888'
+        url: 'http://wiki.bazz1.com:8888',
+        maxFileSize: 999000,
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
     });
 
     // var $widget = $('#fileupload').fileupload(options);
