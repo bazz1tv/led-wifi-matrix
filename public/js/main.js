@@ -21,7 +21,8 @@ var initStuff = function() {
         //xhrFields: {withCredentials: true},
         url: 'http://wiki.bazz1.com:8888',
         maxFileSize: 999000,
-        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+        filesContainer: $('.files')
     });
 
     // var $widget = $('#fileupload').fileupload(options);
