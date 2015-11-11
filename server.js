@@ -1,3 +1,5 @@
+console.log("----- STARTING SERVER -----");
+
 var HOSTNAME="wiki.bazz1.com";
 var HTTP_PORT = 3000;
 var PITALK_PORT = 9999;

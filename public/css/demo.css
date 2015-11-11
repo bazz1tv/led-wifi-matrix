@@ -11,7 +11,6 @@
  */
 
 body {
-  max-width: 850px;
   margin: 0 auto;
   padding: 1em;
   font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, sans-serif;
@@ -64,4 +63,43 @@ table {
   .navigation li:not(:first-child):before {
     content: "| ";
   }
+}
+
+#wrapper {
+  margin: 0 auto;
+  padding: 0 0;
+  max-width: 920px;
+}
+
+#container-wrapper {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+#cam-page {
+  float:left;
+  margin: 24px 0;
+  background-color: #333;
+  max-width: 920px;
+  width: 918px;
+  border: 1px solid #101;
+  position: relative;
+  -webkit-border-shadow: 0 0 10px #111;
+  -moz-border-shadow: 0 0 10px #111;
+  box-shadow: 0 0 10px #111;
+}
+
+#dropcam2{
+  float: left;
+  margin: 0 0;
+  padding: 20px 0 20px 20px;
+}
+
+/* tlkio */
+#tlkio {
+  float:left;
+  margin-left: 14px;
+  margin-top: 20px; 
 }
